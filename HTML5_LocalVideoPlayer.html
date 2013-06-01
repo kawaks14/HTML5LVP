@@ -1,0 +1,97 @@
+<html>
+<head>
+<title>HTML5 Local Video Player</title>
+<style type="text/css">
+* {text-align:center;}
+body {font-family:Sans;}
+input {text-align:left;width:35%;}
+input.tiny {width:100px;}
+button {cursor:pointer;}
+</style>
+<script type="text/javascript">
+var is_loop = false;
+function id(x){
+return document.getElementById(x) ? document.getElementById(x) : x ;
+}
+function ff(num,n){
+     if(isNaN(num)||isNaN(n)){
+           return(0)
+     }else{
+     return(num.toFixed(n))
+           }
+}
+function init(){
+id('t').value="file:///"
+v = id("v");
+if(localStorage.w)
+{
+id("w").value=localStorage.w
+id("v").style.width=localStorage.w
+}
+if(localStorage.h)
+{
+id("h").value=localStorage.h
+id("v").style.height=localStorage.h
+}
+}
+function openv(){
+v.src=id('t').value
+//v.type=id('s').value
+}
+function loops()
+{
+loopd = id("b_loop");
+if (!is_loop)
+{
+loopd.innerHTML="Loop:on";
+v.loop="loop";
+is_loop = true;
+}
+else
+{
+loopd.innerHTML="Loop:off";
+v.removeAttribute("loop");
+is_loop = false;
+}
+}
+function v_timeupdate(){
+ct=v.currentTime
+dr=v.duration
+id("pg").innerHTML=ff(ct/dr*100,1)+"%Played&nbsp;&nbsp;"+parseInt((dr-ct)/60)+":"+ff((dr-ct)%60,0)+"Remain"
+}
+function rhw()
+{
+w=id("w").value
+h=id("h").value
+id("v").style.width=w
+id("v").style.height=h
+localStorage.w=w
+localStorage.h=h
+}
+function cls(){
+localStorage.h=""
+localStorage.w=""
+}
+</script>
+</head>
+<body onload="init()">
+
+<h1>HTML5 Local Video Player</h1>
+
+<input type="text" id="t" onchange="openv()" title="Video Path[For example:file:///home/123.ogv;file:///c:/123.ogv]"></input>
+
+<!--<select id="s" title="Video Type"><option value="">Not specified</option><option value="video/ogg">OGV:video/ogg</option><option value="video/mp4">MPEG4:video/mp4</option><option value="video/webm">WEBM:video/webm</option></select>-->
+
+<button onclick="openv()" title="Open the video">&nbsp;&nbsp;OPEN&nbsp;&nbsp;</button>
+
+<div>&nbsp;</div>
+
+<div id="cter"><video id="v" controls="controls" ontimeupdate="v_timeupdate()"></video></div>
+
+<div><button id="b_loop" onclick="loops()">Loop:off</button>
+<input type="text" class="tiny" size="4" id="w" title="Manually Limit Width,CSS format" maxlength="4" value="800px" />
+<input type="text" class="tiny" size="4" id="h" title="Manually Limit Height,CSS format" maxlength="4" value="600px" />
+<button onclick="rhw()" title="Change video into this width and height and save it to LocalStorage">Confirm</button><button onclick="cls()" title="Remove LocalStorage">Default</button>
+<br />
+<span id="pg"></span></div>
+</html>
